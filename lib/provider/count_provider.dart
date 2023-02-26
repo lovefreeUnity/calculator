@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 
 class CountProvider with ChangeNotifier{
-  int _countNumber = 0;
+  late int _countNumber;
   int get countNumber => _countNumber;
 
+  CountProvider(){
+    _countNumber = 0;
+  }
   addEvent(int num){
     _countNumber += num;
     notifyListeners();
