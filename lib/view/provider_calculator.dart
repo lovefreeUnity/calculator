@@ -7,54 +7,59 @@ class ProviderCalculator extends StatelessWidget {
   ProviderCalculator({Key? key}) : super(key: key);
 
   int inputNum = 0;
+  final CountProvider _countProvider = CountProvider();
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => CountProvider(),
-      builder: (context,child){
-        return WillPopScope(child: Scaffold(
-          body: Container(
-            color: Colors.white,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('결과 : ${Provider.of<CountProvider>(context).countNumber}'),
-                TextField(
-                  keyboardType: TextInputType.number,
-                  onChanged: (text) {
-                    const AsyncSnapshot.waiting();
-                    inputNum = int.parse(text);
-                  },
-                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                  autofocus: false,
-                ),
-                Row(
+      create: (context) => _countProvider,
+      builder: (context, child) {
+        return WillPopScope(
+            child: Scaffold(
+              body: Container(
+                color: Colors.white,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Expanded(
-                      child: ElevatedButton(
-                          onPressed: () {
-                            Provider.of<CountProvider>(context).addEvent(inputNum);
-                          },
-                          child: Text('+')),
+                    Consumer<CountProvider>(
+                      builder: (BuildContext context, value, Widget? child) {
+                        return Text('결과 : ${value.countNumber}');
+                      },
                     ),
-                    Expanded(
-                      child: ElevatedButton(
-                          onPressed: () {
-                            Provider.of<CountProvider>(context)
-                                .subtractEvent(inputNum);
-                          },
-                          child: Text('-')),
+                    TextField(
+                      keyboardType: TextInputType.number,
+                      onChanged: (text) {
+                        inputNum = int.parse(text);
+                      },
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      autofocus: false,
                     ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                              onPressed: () {
+                                _countProvider.addEvent(inputNum);
+                              },
+                              child: Text('+')),
+                        ),
+                        Expanded(
+                          child: ElevatedButton(
+                              onPressed: () {
+                                _countProvider.subtractEvent(inputNum);
+                              },
+                              child: Text('-')),
+                        ),
+                      ],
+                    )
                   ],
-                )
-              ],
+                ),
+              ),
             ),
-          ),
-        ), onWillPop: () async{
-          Navigator.pop(context,Provider.of<CountProvider>(context).countNumber);
-          return false;
-        });
+            onWillPop: () async {
+              Navigator.pop(context, _countProvider.countNumber);
+              return false;
+            });
       },
     );
   }
