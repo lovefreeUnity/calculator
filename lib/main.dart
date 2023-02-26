@@ -1,3 +1,4 @@
+import 'package:calculator/bloc/count_bloc.dart';
 import 'package:calculator/view/provider_calculator.dart';
 import 'package:calculator/view/state_calculator.dart';
 import 'package:flutter/material.dart';
@@ -35,6 +36,7 @@ class SelectDesignPattern extends StatefulWidget {
 
 class _SelectDesignPatternState extends State<SelectDesignPattern> {
   int lastValue = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,24 +46,27 @@ class _SelectDesignPatternState extends State<SelectDesignPattern> {
           children: [
             Text('마지막 결과 : $lastValue'),
             TextButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/SelectDesignPattern/BlocCalculator');
+              onPressed: () async{
+                lastValue = await Navigator.pushNamed(context, '/SelectDesignPattern/BlocCalculator') as int;
+                setState(() {});
               },
               child: const Text(
                   "Bloc"
               ),
             ),
             TextButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/SelectDesignPattern/ProviderCalculator');
+              onPressed: () async{
+                lastValue = await Navigator.pushNamed(context, '/SelectDesignPattern/ProviderCalculator') as int;
+                setState(() {});
               },
               child: const Text(
                   "provider"
               ),
             ),
             TextButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/SelectDesignPattern/StateCalculator');
+              onPressed: () async{
+                lastValue = await Navigator.pushNamed(context, '/SelectDesignPattern/StateCalculator') as int;
+                setState(() {});
               },
               child: const Text(
                   "state"

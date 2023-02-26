@@ -23,48 +23,51 @@ class _BlocCalculatorState extends State<BlocCalculator> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        color: Colors.white,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            StreamBuilder(
-              stream: countBloc.countStream,
-              initialData: 0,
-              builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
-                return Text(
-                    '결과 : ${snapshot.data}'
-                );
-              },
-            ),
-            TextField(
-              keyboardType: TextInputType.number,
-              onChanged: (text){
-                inputNum = int.parse(text);
-              },
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly
-              ],
-              autofocus: false,
-            ),
-            Row(
+    return StreamBuilder(
+
+      stream: countBloc.countStream,
+      initialData: 0,
+      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+        return WillPopScope(child: Scaffold(
+          body: Container(
+            color: Colors.white,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Expanded(
-                  child: ElevatedButton(onPressed: (){
-                    countBloc.addEvent(inputNum);
-                  }, child: Text('+')),
+                Text(
+                    '결과 : ${snapshot.data}'
                 ),
-                Expanded(
-                  child: ElevatedButton(onPressed: (){
-                    countBloc.subtractEvent(inputNum);
-                  }, child: Text('-')),
+                TextField(
+                  keyboardType: TextInputType.number,
+                  onChanged: (text) {
+                    inputNum = int.parse(text);
+                  },
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly
+                  ],
+                  autofocus: false,
                 ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(onPressed: () {
+                        countBloc.addEvent(inputNum);
+                      }, child: Text('+')),
+                    ),
+                    Expanded(
+                      child: ElevatedButton(onPressed: () {
+                        countBloc.subtractEvent(inputNum);
+                      }, child: Text('-')),
+                    ),
+                  ],
+                )
               ],
-            )
-          ],
-        ),
-      ),
-    );
+            ),
+          ),
+        ), onWillPop: () async {
+          Navigator.pop(context,snapshot.data);
+          return false;
+        });
+      },);
   }
 }

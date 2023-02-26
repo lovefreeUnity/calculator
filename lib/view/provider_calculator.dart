@@ -13,7 +13,7 @@ class ProviderCalculator extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (_) => CountProvider(),
       builder: (context,child){
-        return Scaffold(
+        return WillPopScope(child: Scaffold(
           body: Container(
             color: Colors.white,
             child: Column(
@@ -34,8 +34,7 @@ class ProviderCalculator extends StatelessWidget {
                     Expanded(
                       child: ElevatedButton(
                           onPressed: () {
-                            Provider.of<CountProvider>(context)
-                                .addEvent(inputNum);
+                            Provider.of<CountProvider>(context).addEvent(inputNum);
                           },
                           child: Text('+')),
                     ),
@@ -52,7 +51,10 @@ class ProviderCalculator extends StatelessWidget {
               ],
             ),
           ),
-        );
+        ), onWillPop: () async{
+          Navigator.pop(context,Provider.of<CountProvider>(context).countNumber);
+          return false;
+        });
       },
     );
   }
