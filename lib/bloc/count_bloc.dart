@@ -26,3 +26,4 @@ class CountBloc {
     _streamController.close();
   }
 }
+CountBloc countBloc = CountBloc();

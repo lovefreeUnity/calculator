@@ -1,4 +1,4 @@
-import 'package:calculator/bloc/count_bloc.dart';
+import 'package:calculator/circle.dart';
 import 'package:calculator/view/provider_calculator.dart';
 import 'package:calculator/view/state_calculator.dart';
 import 'package:flutter/material.dart';
@@ -18,10 +18,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       initialRoute: '/SelectDesignPattern',
       routes: {
-        '/SelectDesignPattern' : (context) => const SelectDesignPattern(),
-        '/SelectDesignPattern/BlocCalculator' : (context) =>  const BlocCalculator(),
-        '/SelectDesignPattern/ProviderCalculator' : (context) => ProviderCalculator(),
-        '/SelectDesignPattern/StateCalculator' : (context) => const StateCalculator()
+        '/SelectDesignPattern': (context) => const SelectDesignPattern(),
+        '/SelectDesignPattern/BlocCalculator': (context) =>
+            const BlocCalculator(),
+        '/SelectDesignPattern/ProviderCalculator': (context) =>
+            ProviderCalculator(),
+        '/SelectDesignPattern/StateCalculator': (context) =>
+            const StateCalculator()
       },
     );
   }
@@ -36,6 +39,8 @@ class SelectDesignPattern extends StatefulWidget {
 
 class _SelectDesignPatternState extends State<SelectDesignPattern> {
   int lastValue = 0;
+  List list = List.generate(4000, (index) => index);
+  Circle circle = Circle(19);
 
   @override
   Widget build(BuildContext context) {
@@ -44,33 +49,19 @@ class _SelectDesignPatternState extends State<SelectDesignPattern> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('마지막 결과 : $lastValue'),
-            TextButton(
-              onPressed: () async{
-                lastValue = await Navigator.pushNamed(context, '/SelectDesignPattern/BlocCalculator') as int;
+            Text("area : ${circle.area}"),
+            Text("radius : ${circle.radius}"),
+            Text("circumference : ${circle.circumference}"),
+            InkWell(
+              child: Container(
+                height: 100,
+                width: double.infinity,
+                color: Colors.red,
+              ),
+              onTap: () {
+                circle.radius += 10;
                 setState(() {});
               },
-              child: const Text(
-                  "Bloc"
-              ),
-            ),
-            TextButton(
-              onPressed: () async{
-                lastValue = await Navigator.pushNamed(context, '/SelectDesignPattern/ProviderCalculator') as int;
-                setState(() {});
-              },
-              child: const Text(
-                  "provider"
-              ),
-            ),
-            TextButton(
-              onPressed: () async{
-                lastValue = await Navigator.pushNamed(context, '/SelectDesignPattern/StateCalculator') as int;
-                setState(() {});
-              },
-              child: const Text(
-                  "state"
-              ),
             ),
           ],
         ),
@@ -78,4 +69,3 @@ class _SelectDesignPatternState extends State<SelectDesignPattern> {
     );
   }
 }
-
