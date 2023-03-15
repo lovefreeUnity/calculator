@@ -39,7 +39,7 @@ class SelectDesignPattern extends StatefulWidget {
 
 class _SelectDesignPatternState extends State<SelectDesignPattern> {
   int lastValue = 0;
-  List list = List.generate(4000, (index) => index);
+  List list = List.generate(400, (index) => index);
   Circle circle = Circle(19);
 
   @override
